@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 bumpalo = "3.16.0"
 indexmap = "2.2.6"
+unicode-xid = "0.2.4"
 
 [dev-dependencies]
 rand = "0.8.5"

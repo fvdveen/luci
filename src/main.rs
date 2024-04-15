@@ -1,8 +1,10 @@
-use crate::span::Symbol;
+use std::fs;
 
+mod parse;
 mod span;
 
 fn main() {
-    let greet = Symbol::intern("Hello, world!");
-    println!("{}", greet.as_str());
+    let src = fs::read_to_string("examples/main.luci").unwrap();
+
+    parse::lex_file(&src);
 }

@@ -1,3 +1,4 @@
+use core::fmt;
 use std::sync::{Mutex, OnceLock};
 
 use bumpalo::Bump;
@@ -69,6 +70,12 @@ impl Symbol {
         let interner = GLOBAL.get_or_init(|| Interner::prefill(&[]));
 
         unsafe { std::mem::transmute::<&str, &str>(interner.get(*self)) }
+    }
+}
+
+impl fmt::Debug for Symbol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_tuple("Symbol").field(&self.as_str()).finish()
     }
 }
 
