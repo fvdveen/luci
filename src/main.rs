@@ -1,3 +1,8 @@
+use crate::span::Symbol;
+
+mod span;
+
 fn main() {
-    println!("Hello, world!");
+    let greet = Symbol::intern("Hello, world!");
+    println!("{}", greet.as_str());
 }
