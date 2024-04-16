@@ -56,18 +56,18 @@ pub struct Symbol {
 }
 
 impl Symbol {
-    fn new(idx: u32) -> Self {
+    const fn new(idx: u32) -> Self {
         Symbol { index: idx }
     }
 
     pub fn intern(str: impl AsRef<str>) -> Self {
-        let interner = GLOBAL.get_or_init(|| Interner::prefill(&[]));
+        let interner = GLOBAL.get_or_init(|| Interner::fresh());
 
         interner.intern(str.as_ref())
     }
 
     pub fn as_str(&self) -> &str {
-        let interner = GLOBAL.get_or_init(|| Interner::prefill(&[]));
+        let interner = GLOBAL.get_or_init(|| Interner::fresh());
 
         unsafe { std::mem::transmute::<&str, &str>(interner.get(*self)) }
     }
@@ -77,6 +77,29 @@ impl fmt::Debug for Symbol {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_tuple("Symbol").field(&self.as_str()).finish()
     }
+}
+
+macros::symbols! {
+    Keywords {
+        Empty: "",
+        Underscore: "_",
+
+        Else: "else",
+        Fn: "fn",
+        If: "if",
+        Return: "return",
+    }
+
+    Symbols {}
+}
+
+pub mod kw {
+    pub use super::kw_generated::*;
+}
+
+pub mod sym {
+    #[doc(inline)]
+    pub use super::sym_generated::*;
 }
 
 #[cfg(test)]
