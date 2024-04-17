@@ -90,15 +90,20 @@ macros::symbols! {
         Return: "return",
     }
 
-    Symbols {}
+    Symbols {
+        main,
+        println,
+    }
 }
 
 pub mod kw {
+    #[allow(unused_imports)]
     pub use super::kw_generated::*;
 }
 
 pub mod sym {
     #[doc(inline)]
+    #[allow(unused_imports)]
     pub use super::sym_generated::*;
 }
 

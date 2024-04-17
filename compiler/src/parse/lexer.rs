@@ -134,6 +134,41 @@ pub fn is_id_continue(c: char) -> bool {
     unicode_xid::UnicodeXID::is_xid_continue(c)
 }
 
+pub struct LexerIterator<'a> {
+    lexer: Lexer<'a>,
+    seen_eof: bool,
+}
+
+impl Iterator for LexerIterator<'_> {
+    type Item = Token;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let tok = self.lexer.next();
+        if tok.kind == TokenKind::Eof {
+            if !self.seen_eof {
+                self.seen_eof = true;
+                Some(tok)
+            } else {
+                None
+            }
+        } else {
+            Some(tok)
+        }
+    }
+}
+
+impl<'a> IntoIterator for Lexer<'a> {
+    type Item = Token;
+    type IntoIter = LexerIterator<'a>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        LexerIterator {
+            lexer: self,
+            seen_eof: false,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{

@@ -1,20 +1,11 @@
-use self::{lexer::Lexer, token::TokenKind};
+use self::lexer::Lexer;
 
 mod lexer;
 mod token;
 
 pub fn lex_file(src: &str) {
-    let mut lexer = Lexer::new(src);
+    let lexer = Lexer::new(src);
+    let tokens = lexer.into_iter().collect::<Vec<_>>();
 
-    let mut tokens = vec![];
-
-    'lex: loop {
-        let tok = lexer.next();
-        tokens.push(tok);
-        if tokens.last().unwrap().kind == TokenKind::Eof {
-            break 'lex;
-        }
-    }
-
-    println!("{:#?}", tokens)
+    println!("{:#?}", tokens);
 }
